@@ -1,4 +1,4 @@
-### Ubuntu OpenVPN Server + MikroTik OVPN Client + Policy-Based Routing Guide
+# Ubuntu OpenVPN Server + MikroTik OVPN Client + Policy-Based Routing Guide
 
 Step 1: Ubuntu OpenVPN Server Installation
 
@@ -12,27 +12,27 @@ sudo apt-get install openvpn easy-rsa
 
 ```
 
-# Navigate to the /etc/openvpn directory
+### Navigate to the /etc/openvpn directory
   
   ```bash
 cd /etc/openvpn
 ```
 
-# Create a directory named easy-rsa
+### Create a directory named easy-rsa
 
 ```bash
 mkdir easy-rsa
 ```
 
 
-# Copy the easy-rsa files to the /etc/openvpn/easy-rsa directory
+### Copy the easy-rsa files to the /etc/openvpn/easy-rsa directory
 
 ```bash
 cp -r /usr/share/easy-rsa/* /etc/openvpn/easy-rsa/
 ```
 
 
-# Change the permissions of all files and directories within easy-rsa to make them executable
+### Change the permissions of all files and directories within easy-rsa to make them executable
 
 ```bash
 chmod -R 755 /etc/openvpn/easy-rsa/
@@ -40,13 +40,13 @@ chmod -R 755 /etc/openvpn/easy-rsa/
 
 ## Create the vars file
 
-# Navigate to the /etc/openvpn/easy-rsa directory
+### Navigate to the /etc/openvpn/easy-rsa directory
 
 ```bash
 cd /etc/openvpn/easy-rsa
 ```
 
-# Create the vars file
+### Create the vars file
 
 ```bash
 nano vars
@@ -132,7 +132,7 @@ A server certificate and key will be created in the /etc/openvpn/easy-rsa/pki/is
 
 
 
-# Generating keys for encryption of SSL/TLS connections:
+### Generating keys for encryption of SSL/TLS connections:
 
 ```bash
 cd /etc/openvpn/easy-rsa/
@@ -141,7 +141,7 @@ cd /etc/openvpn/easy-rsa/
 ```
 
 
-# Create Keys for the Client:
+### Create Keys for the Client:
 
 ```bash
 ./easyrsa build-client-full client1 nopass
