@@ -233,25 +233,6 @@ Add the following lines to the rules.v4 file:
 COMMIT
 ```
 
-Configure Filter Rules:
-
-```bash
-nano /etc/iptables/rules.v4
-```
-
-Add the following lines to the rules.v4 file:
-
-```bash
-# Filter table rules
-*filter
-:INPUT ACCEPT [126:10528]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [112:13370]
--A INPUT -i tun0 -j ACCEPT
--A INPUT -p tcp -m tcp --dport 1194 -j ACCEPT
-COMMIT
-```
-
 Save the iptables Rules:
 
 ```bash
