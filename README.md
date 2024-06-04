@@ -204,11 +204,69 @@ net.ipv4.ip_forward=1
 
 Save the file and exit the editor.
 
+Install iptables-persistent:
+
+```bash
+apt-get install iptables-persistent
+```
+
 Apply the changes:
 
 ```bash
 sysctl -p
 ```
+
+Add rules into iptables /etc/iptables:
+
+```bash
+nano /etc/iptables/rules.v4
+```
+
+Add the following lines to the rules.v4 file:
+
+```bash
+# NAT table rules
+*nat
+:POSTROUTING ACCEPT [0:0]
+# Allow traffic from OpenVPN client to eth0
+-A POSTROUTING -s 10.0.0.0/24 -o eth0 -j MASQUERADE
+COMMIT
+```
+
+Configure Filter Rules:
+
+```bash
+nano /etc/iptables/rules.v4
+```
+
+Add the following lines to the rules.v4 file:
+
+```bash
+# Filter table rules
+*filter
+:INPUT ACCEPT [126:10528]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [112:13370]
+-A INPUT -i tun0 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 1194 -j ACCEPT
+COMMIT
+```
+
+Save the iptables Rules:
+
+```bash
+iptables-restore < /etc/iptables/rules.v4
+```
+
+Restart the OpenVPN service:
+
+```bash
+service openvpn restart
+```
+
+
+Save the file and exit the editor.
+
 
 Now you can start the OpenVPN service:
 
