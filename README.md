@@ -267,7 +267,139 @@ Add openvpn service in autoload:
 update-rc.d openvpn enable
 ```
 
-Step 2: MikroTik OVPN Client Configuration
+How to Export the Client Certificate and Key Pair that you will use on the MikroTik Router:
+
+```bash
+cd /etc/openvpn/easy-rsa/pki
+```
+
+```bash
+cp ca.crt /etc/openvpn/client/
+cp issued/client1.crt /etc/openvpn/client/
+cp private/client1.key /etc/openvpn/client/
+```
+
+Update the OpenVPN server configuration file to reflect the changes:
+
+```bash
+nano /etc/openvpn/server.conf
+```
+
+Add the following lines to the server.conf file:
+
+```bash
+ca /etc/openvpn/client/ca.crt
+cert /etc/openvpn/client/client1.crt
+key /etc/openvpn/client/client1.key
+```
+
+Save the file and exit the editor.
+
+
+Restart the OpenVPN service:
+
+```bash
+service openvpn restart
+```
+
+
+## Step 2: MikroTik OVPN Client Configuration
+
+Login to your MikroTik router and navigate to the System menu and click on the Certificates option.
+
+Click on the Import button and import the CA certificate, client certificate, and client key.
+
+Navigate to the PPP menu and click on the Interface tab.
+
+Click on the OVPN Client button and add a new OVPN client.
+
+
+
+Fill in the required information:
+
+Name: Name of the OVPN client <Client1>
+
+Connect To: Public IP address of the OpenVPN server <Public IP Address>
+
+Port: 1194 (default)
+
+Mode: ip (default)
+
+User: Username (if required)
+
+Password: Password (if required)
+
+Certificate: Client certificate imported in the MikroTik router
+
+Auth: sha1 (default)
+
+Cipher: aes256 (default)
+
+
+
+
+Add a new route to the OVPN client:
+
+1. After creating the OVPN client interface, select it from the list of interfaces.
+
+2. Click on the "Routes" button.
+
+3. Add a new route with the following information:
+
+Dst. Address:
+
+4. Leave the Gateway field blank.
+
+5. Leave "Check Gateway" unchecked.
+
+6. Leave "Routing Mark" blank.
+
+7. Keep the Distance as default (1).
+
+8. Click on the "OK" button to save the route.
+
+9. Repeat these steps to add additional routes if needed.
+
+
+## Step 3: Policy-Based Routing Configuration
+
+Navigate to the IP menu and click on the Firewall tab.
+
+Click on the Mangle button and add a new rule.
+
+Fill in the required information:
+
+Chain: prerouting
+
+Src. Address: IP address of the device you want to route through the OpenVPN server
+
+Action: mark routing
+
+New Routing Mark: ovpn
+
+Click on the "OK" button to save the rule.
+
+Navigate to the IP menu and click on the Routes tab.
+
+
+Click on the "+" button to add a new route.
+
+Fill in the required information:
+
+Dst. Address:
+
+Gateway: IP address of the OpenVPN server
+
+Routing Mark: ovpn
+
+Click on the "OK" button to save the route.
+
+Repeat these steps to add additional routes if needed.
+
+
+
+
+
 
 
 
