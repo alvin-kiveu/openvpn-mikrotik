@@ -144,7 +144,7 @@ cd /etc/openvpn/easy-rsa/
 ### Create Keys for the Client:
 
 ```bash
-./easyrsa build-client-full client1 nopass
+./easyrsa build-client-full C001 nopass
 ```
 
 Replace client with the name you want to use for your client. This command will generate a certificate and key pair for the client. The certificate will be located in the /etc/openvpn/easy-rsa/pki/issued/client.crt directory.
@@ -188,6 +188,12 @@ explicit-exit-notify 1
 ```
 
 Save the file and exit the editor.
+
+Allow port 1194 through the firewall:
+
+```bash
+ufw allow 1194/udp
+```
 
 Enable IP Forwarding:
 
@@ -267,141 +273,68 @@ Add openvpn service in autoload:
 update-rc.d openvpn enable
 ```
 
-How to Export the Client Certificate and Key Pair that you will use on the MikroTik Router:
-
-```bash
-cd /etc/openvpn/easy-rsa/pki
-```
-
-```bash
-cp ca.crt /etc/openvpn/client/
-cp issued/client1.crt /etc/openvpn/client/
-cp private/client1.key /etc/openvpn/client/
-```
-
-Update the OpenVPN server configuration file to reflect the changes:
-
-```bash
-nano /etc/openvpn/server.conf
-```
-
-Add the following lines to the server.conf file:
-
-```bash
-ca /etc/openvpn/client/ca.crt
-cert /etc/openvpn/client/client1.crt
-key /etc/openvpn/client/client1.key
-```
-
-Save the file and exit the editor.
-
-
 Restart the OpenVPN service:
 
 ```bash
 service openvpn restart
 ```
 
+Check the status of the OpenVPN service:
 
-## Step 2: MikroTik OVPN Client Configuration
+```bash
+service openvpn status
+```
 
-Login to your MikroTik router and navigate to the System menu and click on the Certificates option.
+Get your CA certificate, client certificate, and client key from the /etc/openvpn/easy-rsa/pki/ directory. You will need these files to configure the OpenVPN client.
 
-Click on the Import button and import the CA certificate, client certificate, and client key.
+CA Certificate:
 
-Navigate to the PPP menu and click on the Interface tab.
+```bash
+cat /etc/openvpn/easy-rsa/pki/ca.crt
+```
 
-Click on the OVPN Client button and add a new OVPN client.
+Client Certificate:
 
+```bash
+cat /etc/openvpn/easy-rsa/pki/issued/C001.crt
+```
 
+Client Key:
 
-Fill in the required information:
+```bash
+cat /etc/openvpn/easy-rsa/pki/private/C001.key
+```
 
-Name: Name of the OVPN client <Client1>
-
-Connect To: Public IP address of the OpenVPN server <Public IP Address>
-
-Port: 1194 (default)
-
-Mode: ip (default)
-
-User: Username (if required)
-
-Password: Password (if required)
-
-Certificate: Client certificate imported in the MikroTik router
-
-Auth: sha1 (default)
-
-Cipher: aes256 (default)
+Copy and both and save them in a safe place. 
 
 
 
 
-Add a new route to the OVPN client:
-
-1. After creating the OVPN client interface, select it from the list of interfaces.
-
-2. Click on the "Routes" button.
-
-3. Add a new route with the following information:
-
-Dst. Address:
-
-4. Leave the Gateway field blank.
-
-5. Leave "Check Gateway" unchecked.
-
-6. Leave "Routing Mark" blank.
-
-7. Keep the Distance as default (1).
-
-8. Click on the "OK" button to save the route.
-
-9. Repeat these steps to add additional routes if needed.
+The OpenVPN server is now installed and configured. The next step is to configure the MikroTik OVPN client.
 
 
-## Step 3: Policy-Based Routing Configuration
+### Step 1: MikroTik OVPN Client Configuration
 
-Navigate to the IP menu and click on the Firewall tab.
+1. Open the Winbox application and log in to your MikroTik router.
 
-Click on the Mangle button and add a new rule.
+2. Click on the System menu and select the Certificates option.
 
-Fill in the required information:
+3. Click on the Import button and import the CA certificate, client certificate, and client key that you saved from the OpenVPN server.
 
-Chain: prerouting
+4. Click on Interfaces and select the OVPN Client option.
 
-Src. Address: IP address of the device you want to route through the OpenVPN server
+5. Click on the Add New button to create a new OVPN client.
 
-Action: mark routing
+6. Fill in the Name, Connect To, User, Password, Certificate, and Key fields with the appropriate information.
 
-New Routing Mark: ovpn
+7. Click on the OK button to save the OVPN client configuration.
 
-Click on the "OK" button to save the rule.
+8. Click on the Enable button to enable the OVPN client.
 
-Navigate to the IP menu and click on the Routes tab.
-
-
-Click on the "+" button to add a new route.
-
-Fill in the required information:
-
-Dst. Address:
-
-Gateway: IP address of the OpenVPN server
-
-Routing Mark: ovpn
-
-Click on the "OK" button to save the route.
-
-Repeat these steps to add additional routes if needed.
+9. The MikroTik OVPN client is now configured and connected to the OpenVPN server. You can now configure policy-based routing on the MikroTik router.
 
 
-
-
-
-
-
+### Step 3: MikroTik Policy-Based Routing Configuration
 
 
 
