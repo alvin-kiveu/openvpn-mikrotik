@@ -2,44 +2,23 @@
 
 This is a guide to setup an OpenVPN server on an Ubuntu machine and connect to it from a MikroTik router.
 
-## OpenVPN Server
+## Usage
 
-### Install OpenVPN
 
-```bash
-sudo apt-get update
-```
-
-Create a New Folder name OpenVPN
+First, get the script and make it executable:
 
 ```bash
-mkdir OpenVPN
+wget https://raw.githubusercontent.com/alvin-kiveu/openvpn-mikrotik/main/mikrotik-ovpn-install.sh -O mikrotik-ovpn-install.sh
 ```
 
 ```bash
-cd OpenVPN
+chmod +x mikrotik-ovpn-install.sh
 ```
+
+Then, run the script:
 
 ```bash
-wget https://git.io/vpn -O openvpn-install.sh
+./mikrotik-ovpn-install.sh
 ```
-
-```bash
-chmod +x openvpn-install.sh
-```
-
-```bash
-sudo ./openvpn-install.sh
-```
-
-
-
-Remaove 
-
-apt-get install -y wget
-
-
-
-
 
 
