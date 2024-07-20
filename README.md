@@ -34,4 +34,12 @@ sudo ./openvpn-install.sh
 
 
 
+Remaove 
+
+apt-get install -y wget
+
+
+
+
+
 
