@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# https://github.com/Nyr/openvpn-install
+# https://github.com/alvin-kiveu/openvpn-mikrotik.git
 #
 # Copyright (c) 2013 Nyr. Released under the MIT License.
 
@@ -316,7 +316,9 @@ if [[ ! -e /etc/openvpn/server/server.conf ]]; then
     echo "Client configuration is available at /etc/openvpn/clients/$client.ovpn"
     echo "Add the following lines to your OpenVPN client configuration file to use username and password authentication:"
     echo "auth-user-pass"
-}
+		exit
+fi
+
 
 # Run the client creation function
 new_client
